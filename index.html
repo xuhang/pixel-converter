@@ -4,10 +4,72 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="PIXEL, CONVERTOR, DOT, MINECRAFT, CSS">
+    <meta property="og:site_name" content="Convert Image to Pixel">
+    <meta property="og:title" content="Convert Image to Pixel">
+    <meta property="og:url" content="https://pixel.popgame.fun/">
+    <meta property="og:title" content="Convert Image to Pixel">
+    <meta property="og:image" content="./pixel.png">
+    <meta charset="UTF-8">
     <base target="_blank">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <title>Convert Image to Pixel</title>
+    <style>
+
+        .download-wrap {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .download-btn {
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #45a049;
+        }
+
+        /* 添加卡片容器样式 */
+        .cards-container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* 调整每个卡片样式 */
+        .card-shadow,
+        .card-canvas,
+        .card-image {
+            flex: 1;
+            min-width: 0; /* 防止内容溢出 */
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 确保内容不会溢出 */
+        .size-wrap {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .image-wrap img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
     <meta name="description"
-        content="上传图片即可一键将图片转换为像素风格，支持多种自定义方式，可生成方块像素、点状像素和文字像素图等等。支持导出纯 CSS 像素图，并支持生成 CSS 像素图动画。" />
+        content="Convert your image to pixel style with ONE CLICK." />
 </head>
 
 <body>
@@ -18,8 +80,8 @@
         </div>
         <div id="app" style="display: none">
             <div class="card-info">
-                <h2 class="title">图片像素转换器</h2>
-                <div class="remark"><span class="symbol-wrap"><span class="symbol">✌️</span></span> 将你的图片转成像素风 <span
+                <h2 class="title">Image Pixel Converter</h2>
+                <div class="remark"><span class="symbol-wrap"><span class="symbol">✌️</span></span> Convert your image to pixel style <span
                         class="symbol">✌️</span></div>
                 <hr>
                 <div class="form">
@@ -54,41 +116,49 @@
                         <label>enable anime mode<input type="checkbox" id="anime-mode"></label>
                     </div>
                 </div>
-                <div class="btn-group">
+                <!-- <div class="btn-group">
                     <button id="import">change image</button>
                     <button id="export">copy shadow style</button>
-                </div>
+                </div> -->
             </div>
-            <div class="card-shadow">
-                <h2>pixel shadow</h2>
-                <div class="size-wrap">
-                    <div class="pixel-wrap">
-                        <div class="pixel"></div>
+            <div class="cards-container">
+                <div class="card-shadow">
+                    <h2>shadow</h2>
+                    <div class="size-wrap">
+                        <div class="pixel-wrap">
+                            <div class="pixel"></div>
+                        </div>
+                    </div>
+                    <div class="download-wrap">
+                        <button id="export" class="download-btn">copy shadow style</button>
                     </div>
                 </div>
-            </div>
-            <div class="card-canvas">
-                <h2>pixel canvas</h2>
-                <div class="size-wrap">
-                    <canvas id="canvas" width="200" height="200"></canvas>
+                <div class="card-canvas">
+                    <h2>pixel</h2>
+                    <div class="size-wrap">
+                        <canvas id="canvas" width="200" height="200"></canvas>
+                    </div>
+                    <div class="download-wrap">
+                        <button id="download-canvas" class="download-btn">download pixel</button>
+                    </div>
                 </div>
-            </div>
-            <div class="card-image">
-                <h2>original image</h2>
-                <div class="image-wrap">
-                    <img id="image" src="" alt="">
-                </div>
-                <div class="tip">
-                    click to change image
+                <div class="card-image">
+                    <h2>original image</h2>
+                    <div class="image-wrap">
+                        <img id="image" src="" alt="">
+                    </div>
+                    <div class="tip">
+                        click to change image
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer id="footer">
-        <p class="copyright">© 2022-present <a href="https://github.com/ZxBing0066">ZxBing0066</a>. All Rights Reserved.
+    <!-- <footer id="footer">
+        <p class="copyright">©  <a href="https://github.com/ZxBing0066">ZxBing0066</a>. All Rights Reserved.
         </p>
         <a href="https://github.com/ZxBing0066/pixel-converter" class="github"><img src="/GitHub.png" alt=""></a>
-    </footer>
+    </footer> -->
     <style id="pixel-style"></style>
     <input type="file" id="file" accept="image/*" hidden>
     <canvas id="offscreen" width="20" height="20" hidden></canvas>

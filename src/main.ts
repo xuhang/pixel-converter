@@ -359,5 +359,90 @@ const outputRandomShadow = (size: number) => {
 exportButtonDOM.addEventListener('click', () => {
     const style = generateShadowCss();
     copy(style);
-    alert('已复制到剪切板');
+    alert('Copied to clipboard.');
 });
+
+// 下载 shadow 图片
+function downloadShadowImage() {
+    const pixelWrap = document.querySelector('.pixel-wrap');
+    const pixel = document.querySelector('.pixel');
+    
+    if (!pixelWrap || !pixel) return;
+    
+    // 创建 canvas
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // 获取实际图片尺寸
+    const computedStyle = window.getComputedStyle(pixelWrap);
+    canvas.width = parseInt(computedStyle.width);
+    canvas.height = parseInt(computedStyle.height);
+    
+    // 获取 box-shadow 样式
+    const style = window.getComputedStyle(pixel);
+    const boxShadow = style.boxShadow;
+    
+    // 绘制背景
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // 解析 box-shadow
+    const shadowsMatch = boxShadow.match(/(-?\d+px\s+-?\d+px\s+0px\s+0px\s+(?:rgb\([^)]+\)|rgba\([^)]+\)|#[0-9a-f]{6}))/gi);
+    if (!shadowsMatch) return;
+    
+    // 获取像素大小
+    const pixelSize = parseInt(style.width) || 1;
+    
+    // 绘制每个像素点
+    shadowsMatch.forEach(shadow => {
+        const [x, y, , , color] = shadow.split(/\s+/);
+        const xPos = parseInt(x) + Math.abs(Math.min(...shadowsMatch.map(s => parseInt(s.split(/\s+/)[0]))));
+        const yPos = parseInt(y) + Math.abs(Math.min(...shadowsMatch.map(s => parseInt(s.split(/\s+/)[1]))));
+        
+        ctx.fillStyle = color;
+        ctx.fillRect(xPos, yPos, pixelSize, pixelSize);
+    });
+    
+    // 下载图片
+    canvas.toBlob((blob) => {
+        if (blob) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pixel-shadow.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    }, 'image/png');
+}
+
+// 下载 canvas 图片
+function downloadCanvasImage() {
+    const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    
+    downloadCanvas(canvas, 'pixel-canvas.png');
+}
+
+// 通用的 canvas 下载函数
+function downloadCanvas(canvas: HTMLCanvasElement, filename: string) {
+    canvas.toBlob((blob) => {
+        if (blob) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    }, 'image/png');
+}
+
+// 添加事件监听
+document.getElementById('download-shadow')?.addEventListener('click', downloadShadowImage);
+document.getElementById('download-canvas')?.addEventListener('click', downloadCanvasImage);
